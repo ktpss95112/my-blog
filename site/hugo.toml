@@ -1,4 +1,4 @@
-baseURL = 'https://ktpss95112.github.io/'
+baseURL = 'https://ktpss95112.github.io/my-blog/'
 languageCode = 'zh-tw'
 title = "Chiffoncake's Blog"
 theme = 'ananke'
