@@ -2,9 +2,9 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Categories on Chiffoncake&#39;s Blog</title>
-    <link>https://ktpss95112.github.io/categories/</link>
+    <link>https://ktpss95112.github.io/my-blog/categories/</link>
     <description>Recent content in Categories on Chiffoncake&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>zh-tw</language><atom:link href="https://ktpss95112.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    <language>zh-tw</language><atom:link href="https://ktpss95112.github.io/my-blog/categories/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>

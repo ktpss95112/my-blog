@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Chiffoncake&#39;s Blog</title>
-    <link>https://ktpss95112.github.io/</link>
+    <link>https://ktpss95112.github.io/my-blog/</link>
     <description>Recent content on Chiffoncake&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-tw</language>
-    <lastBuildDate>Sat, 21 Oct 2023 00:45:04 +0800</lastBuildDate><atom:link href="https://ktpss95112.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 21 Oct 2023 00:45:04 +0800</lastBuildDate><atom:link href="https://ktpss95112.github.io/my-blog/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>My First Post</title>
-      <link>https://ktpss95112.github.io/posts/my-first-post/</link>
+      <link>https://ktpss95112.github.io/my-blog/posts/my-first-post/</link>
       <pubDate>Sat, 21 Oct 2023 00:45:04 +0800</pubDate>
       
-      <guid>https://ktpss95112.github.io/posts/my-first-post/</guid>
+      <guid>https://ktpss95112.github.io/my-blog/posts/my-first-post/</guid>
       <description>First Post This website is still work in progress &amp;hellip;
 Big thanks to James Hsu for keeping pushing me to work on my personal website.</description>
     </item>
