@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>自架 Overleaf | Chiffoncake&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="description" content="[TOC]
+前言 感謝吾友 James Hsu 頻頻 掛念 鄙人的部落格，期望以此文感謝他對我的重視。
+在此也先為了這施工中的醜醜部落格道歉。
+正文 Overleaf 是一個線上的 LaTeX 編輯器，不需要自己搞複雜的環境就可以寫 LaTeX，而且還支援像 HackMD 或是 Google Docs 那種多人同時連線編輯的功能，但 Overleaf 免費版的功能有一定的限制，我自己最明顯感受到的限制是同一個 project 只能加一位協作者，不然就是得要開啟 sharing link。試想大部分的課程 project 都要求 3 人一組，如果要用 overleaf 的話就只能開 sharing link，一想到如果連結不小心外流的話東西就有可能被刪光光，緊張到都睡不著了（才沒有）。自架的 overleaf 就沒有這種人數上限，有多少朋友就加多少協作者，沒問題的。
+本篇我所修改過的 code 都可以在 我的 repo 找到。
+做功課：Overleaf Community Edition Overleaf 的 GitHub 上有兩個 repo:
+overleaf: Overleaf 整個服務的 source code overleaf-toolkit: 自架 Overleaf 的便利工具 在 Overleaf 的 Wiki 上有關於硬體設備的建議：
+最低要求 2 core 和 3 GB memory &hellip; 大約支援 5 個使用者同時在線 每 5~10 個使用者大約需要 1 core 和 1 GB memory，「大約」而已 LaTeX 是一個 single threaded program，所以編譯 PDF 的速度取決於單一 cpu 的強度 &hellip; 還是存在著一種可能性是自架的 Overleaf 的編譯速度比 overleaf.">
+    <meta name="generator" content="Hugo 0.122.0">
+    
+    
+    
+    
+      <meta name="robots" content="noindex, nofollow">
+    
+
+    
+<link rel="stylesheet" href="/my-blog/ananke/css/main.min.css" >
+
+
+
+    
+    
+    
+      
+
+    
+
+    
+    
+    <meta property="og:title" content="自架 Overleaf" />
+<meta property="og:description" content="[TOC]
+前言 感謝吾友 James Hsu 頻頻 掛念 鄙人的部落格，期望以此文感謝他對我的重視。
+在此也先為了這施工中的醜醜部落格道歉。
+正文 Overleaf 是一個線上的 LaTeX 編輯器，不需要自己搞複雜的環境就可以寫 LaTeX，而且還支援像 HackMD 或是 Google Docs 那種多人同時連線編輯的功能，但 Overleaf 免費版的功能有一定的限制，我自己最明顯感受到的限制是同一個 project 只能加一位協作者，不然就是得要開啟 sharing link。試想大部分的課程 project 都要求 3 人一組，如果要用 overleaf 的話就只能開 sharing link，一想到如果連結不小心外流的話東西就有可能被刪光光，緊張到都睡不著了（才沒有）。自架的 overleaf 就沒有這種人數上限，有多少朋友就加多少協作者，沒問題的。
+本篇我所修改過的 code 都可以在 我的 repo 找到。
+做功課：Overleaf Community Edition Overleaf 的 GitHub 上有兩個 repo:
+overleaf: Overleaf 整個服務的 source code overleaf-toolkit: 自架 Overleaf 的便利工具 在 Overleaf 的 Wiki 上有關於硬體設備的建議：
+最低要求 2 core 和 3 GB memory &hellip; 大約支援 5 個使用者同時在線 每 5~10 個使用者大約需要 1 core 和 1 GB memory，「大約」而已 LaTeX 是一個 single threaded program，所以編譯 PDF 的速度取決於單一 cpu 的強度 &hellip; 還是存在著一種可能性是自架的 Overleaf 的編譯速度比 overleaf." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ktpss95112.github.io/my-blog/posts/20240212-overleaf/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2024-02-12T16:19:04+08:00" />
+<meta property="article:modified_time" content="2024-02-12T16:19:04+08:00" />
+
+<meta itemprop="name" content="自架 Overleaf">
+<meta itemprop="description" content="[TOC]
+前言 感謝吾友 James Hsu 頻頻 掛念 鄙人的部落格，期望以此文感謝他對我的重視。
+在此也先為了這施工中的醜醜部落格道歉。
+正文 Overleaf 是一個線上的 LaTeX 編輯器，不需要自己搞複雜的環境就可以寫 LaTeX，而且還支援像 HackMD 或是 Google Docs 那種多人同時連線編輯的功能，但 Overleaf 免費版的功能有一定的限制，我自己最明顯感受到的限制是同一個 project 只能加一位協作者，不然就是得要開啟 sharing link。試想大部分的課程 project 都要求 3 人一組，如果要用 overleaf 的話就只能開 sharing link，一想到如果連結不小心外流的話東西就有可能被刪光光，緊張到都睡不著了（才沒有）。自架的 overleaf 就沒有這種人數上限，有多少朋友就加多少協作者，沒問題的。
+本篇我所修改過的 code 都可以在 我的 repo 找到。
+做功課：Overleaf Community Edition Overleaf 的 GitHub 上有兩個 repo:
+overleaf: Overleaf 整個服務的 source code overleaf-toolkit: 自架 Overleaf 的便利工具 在 Overleaf 的 Wiki 上有關於硬體設備的建議：
+最低要求 2 core 和 3 GB memory &hellip; 大約支援 5 個使用者同時在線 每 5~10 個使用者大約需要 1 core 和 1 GB memory，「大約」而已 LaTeX 是一個 single threaded program，所以編譯 PDF 的速度取決於單一 cpu 的強度 &hellip; 還是存在著一種可能性是自架的 Overleaf 的編譯速度比 overleaf."><meta itemprop="datePublished" content="2024-02-12T16:19:04+08:00" />
+<meta itemprop="dateModified" content="2024-02-12T16:19:04+08:00" />
+<meta itemprop="wordCount" content="608">
+<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="自架 Overleaf"/>
+<meta name="twitter:description" content="[TOC]
+前言 感謝吾友 James Hsu 頻頻 掛念 鄙人的部落格，期望以此文感謝他對我的重視。
+在此也先為了這施工中的醜醜部落格道歉。
+正文 Overleaf 是一個線上的 LaTeX 編輯器，不需要自己搞複雜的環境就可以寫 LaTeX，而且還支援像 HackMD 或是 Google Docs 那種多人同時連線編輯的功能，但 Overleaf 免費版的功能有一定的限制，我自己最明顯感受到的限制是同一個 project 只能加一位協作者，不然就是得要開啟 sharing link。試想大部分的課程 project 都要求 3 人一組，如果要用 overleaf 的話就只能開 sharing link，一想到如果連結不小心外流的話東西就有可能被刪光光，緊張到都睡不著了（才沒有）。自架的 overleaf 就沒有這種人數上限，有多少朋友就加多少協作者，沒問題的。
+本篇我所修改過的 code 都可以在 我的 repo 找到。
+做功課：Overleaf Community Edition Overleaf 的 GitHub 上有兩個 repo:
+overleaf: Overleaf 整個服務的 source code overleaf-toolkit: 自架 Overleaf 的便利工具 在 Overleaf 的 Wiki 上有關於硬體設備的建議：
+最低要求 2 core 和 3 GB memory &hellip; 大約支援 5 個使用者同時在線 每 5~10 個使用者大約需要 1 core 和 1 GB memory，「大約」而已 LaTeX 是一個 single threaded program，所以編譯 PDF 的速度取決於單一 cpu 的強度 &hellip; 還是存在著一種可能性是自架的 Overleaf 的編譯速度比 overleaf."/>
+
+	
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="/my-blog/" class="f3 fw2 hover-white no-underline white-90 dib">
+      
+        Chiffoncake&#39;s Blog
+      
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+      
+<div class="ananke-socials">
+  
+</div>
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  <article class="flex-l flex-wrap justify-between mw8 center ph3">
+    <header class="mt4 w-100">
+      <aside class="instapaper_ignoref b helvetica tracked">
+          
+        POSTS
+      </aside>
+      
+
+
+
+
+
+
+
+
+
+
+  <div id="sharing" class="mt3 ananke-socials">
+    
+  </div>
+
+
+      <h1 class="f1 athelas mt3 mb1">自架 Overleaf</h1>
+      
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2024-02-12T16:19:04+08:00">February 12, 2024</time>
+      
+
+      
+      
+    </header>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links mid-gray pr4-l w-two-thirds-l"><p>[TOC]</p>
+<h2 id="前言">前言</h2>
+<p>感謝吾友 <a href="https://jameshsu.csie.org/">James Hsu</a> 頻頻 <a href="https://github.com/ktpss95112/my-blog/issues/1#issue-2098927637">掛念</a> 鄙人的部落格，期望以此文感謝他對我的重視。</p>
+<p>在此也先為了這施工中的醜醜部落格道歉。</p>
+<hr>
+<h2 id="正文">正文</h2>
+<p><a href="https://www.overleaf.com">Overleaf</a> 是一個線上的 LaTeX 編輯器，不需要自己搞複雜的環境就可以寫 LaTeX，而且還支援像 HackMD 或是 Google Docs 那種多人同時連線編輯的功能，但 Overleaf 免費版的功能有一定的限制，我自己最明顯感受到的限制是同一個 project 只能加一位協作者，不然就是得要開啟 sharing link。試想大部分的課程 project 都要求 3 人一組，如果要用 overleaf 的話就只能開 sharing link，一想到如果連結不小心外流的話東西就有可能被刪光光，緊張到都睡不著了（才沒有）。自架的 overleaf 就沒有這種人數上限，有多少朋友就加多少協作者，沒問題的。</p>
+<p>本篇我所修改過的 code 都可以在 <a href="https://github.com/ktpss95112/overleaf-toolkit">我的 repo</a> 找到。</p>
+<hr>
+<h3 id="做功課overleaf-community-edition">做功課：Overleaf Community Edition</h3>
+<p>Overleaf 的 GitHub 上有兩個 repo:</p>
+<ul>
+<li><a href="https://github.com/overleaf/overleaf">overleaf</a>: Overleaf 整個服務的 source code</li>
+<li><a href="https://github.com/overleaf/toolkit/">overleaf-toolkit</a>: 自架 Overleaf 的便利工具</li>
+</ul>
+<p>在 Overleaf 的 <a href="https://github.com/overleaf/overleaf/wiki/Hardware-Requirements">Wiki</a> 上有關於硬體設備的建議：</p>
+<ul>
+<li>最低要求 2 core 和 3 GB memory
+<ul>
+<li>&hellip; 大約支援 5 個使用者同時在線</li>
+</ul>
+</li>
+<li>每 5~10 個使用者大約需要 1 core 和 1 GB memory，「大約」而已</li>
+<li><strong>LaTeX 是一個 single threaded program，所以編譯 PDF 的速度取決於單一 cpu 的強度</strong>
+<ul>
+<li>&hellip; 還是存在著一種可能性是自架的 Overleaf 的編譯速度比 overleaf.com 還來得慢</li>
+</ul>
+</li>
+</ul>
+<p>總而言之，Overleaf 的 Wiki 上有很多重要的資訊可以仔細看。這邊不會全部介紹。</p>
+<hr>
+<h3 id="架一個-self-hosted-overleaf">架一個 Self-hosted Overleaf</h3>
+<p>要在自己的機器上跑起一個 Overleaf server，有兩種方式。第一種是從 Overleaf 的 source code（剛剛的第一個 repo）開始，依照他的指示包成一個 docker image；第二種是用 overleaf-toolkit（剛剛的第二個 repo）裡的工具直接 pull 一個 <a href="https://hub.docker.com/r/sharelatex/sharelatex">官方 docker image</a> 下來，用 toolkit 裡面的 script 就馬上可以跑了（理論上）。</p>
+<p>依照 <a href="https://github.com/overleaf/toolkit/blob/master/doc/quick-start-guide.md">toolkit 的 quick start guide</a>，執行下面指令：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git clone https://github.com/overleaf/toolkit.git overleaf-toolkit
+</span></span><span style="display:flex;"><span>cd overleaf-toolkit
+</span></span><span style="display:flex;"><span>bin/init
+</span></span><span style="display:flex;"><span>bin/up
+</span></span></code></pre></div><p><img src="../../images/20240212/bin-up.png" alt=""></p>
+<blockquote>
+<p>Note 1: 我有在 Proxmox VE 開一台虛擬機測試，如果執行上面指令看到 <code>bin/up</code> 輸出 mongo service 的狀態是 error 而不是 running 或 healthy，可以打 <code>bin/docker-compose logs mongo</code> 來看 mongo service 的錯誤訊息，會發現可能是 mongo 抱怨 cpu 沒有支援 AVX 的指令集。Google 到的解決方法是把 Proxmox VE 虛擬機的 cpu type 設定成 host，因為預設的 qemu cpu 沒有支援 AVX。</p>
+</blockquote>
+<blockquote>
+<p>Note 2: 如果遇到 mongo service 一樣還是開不起來，錯誤訊息有 <code>IllegalOperation</code> 或是 <code>/etc/my_init.d/</code> 什麼的，那可能是遇到 mongo db 沒有正常 initialize 的問題。解決方法請參考 <a href="https://github.com/overleaf/overleaf/issues/1120#issuecomment-1623295314">issue</a>。</p>
+</blockquote>
+<p>幾個你可能會想要改的東西（全部資訊請看 <a href="https://github.com/overleaf/toolkit/blob/master/doc/overleaf-rc.md">wiki</a> 和 <a href="https://github.com/overleaf/overleaf/wiki/Configuring-Overleaf">wiki</a>）：</p>
+<ul>
+<li><code>config/overleaf.rc</code> 裡面的 <code>SHARELATEX_LISTEN_IP</code> 和 <code>SHARELATEX_PORT</code>，如果你想要改 Overleaf listen 的 IP 跟 port</li>
+<li><code>config/variables.env</code> 裡面的 <code>SHARELATEX_APP_NAME</code>，如果你想要改 Overleaf 在登入頁面的 title</li>
+</ul>
+<p>接下來根據 <a href="https://github.com/overleaf/toolkit/blob/master/doc/quick-start-guide.md#create-the-first-admin-account">quick start guide</a> 的說法，我們需要前往 launchpad 開通第一個 admin 帳號。開通之後就可以開始測試（亂玩）Overleaf community edition 的功能了。</p>
+<hr>
+<h3 id="來亂改吧-x-來加新功能吧-o">來亂改吧 (X) 來加新功能吧 (O)</h3>
+<p>可以發現到 Overleaf community edition 預設的功能其實相當有限且不便，例如：</p>
+<ul>
+<li>要新增使用者只能用 admin 使用者登入進到 admin panel 裡面去註冊新使用者的 email，而且新使用者必須透過 one-time password reset URL 才能設定自己的密碼
+<ul>
+<li>好啦其實在 <a href="https://github.com/overleaf/overleaf/wiki/Creating-and-managing-users">官方 wiki</a> 有講到，雖然說好像可以用 <code>server-ce-scripts</code> 底下的 script 去新增使用者就是了，但一樣還是要用 one-time password reset URL 才能設定密碼</li>
+</ul>
+</li>
+<li>預設有裝的 LaTeX 套件很少，畫圖常用的像是 tikz 是沒辦法使用的，要額外安裝
+<ul>
+<li>好啦其實在 <a href="https://github.com/overleaf/toolkit/blob/master/doc/ce-upgrading-texlive.md">官方 wiki</a> 有講到，可以用 <code>bin/shell</code> 進到 Overleaf 的 docker container 裡面去手動安裝套件，但這樣每次重新 deploy 都要手動再去跑一次安裝套件</li>
+</ul>
+</li>
+<li>admin 使用者能查看的 admin panel 功能超陽春，連個 server 總使用者數 / 總 project 數都看不到
+<ul>
+<li>好啦其實還是可以用 <code>bin/mongo</code> 進到 mongodb 的 shell，直接從 db 裡面下指令撈這些資訊</li>
+</ul>
+</li>
+<li>當你把一個使用者加入 project 的協作者時，Overleaf 會在畫面上顯示「已寄出邀請連結至信箱」，但問題是我們沒有設定 Overleaf 可以寄出 email，所以你邀請的使用者永遠沒辦法透過邀請連結來加入你的 project
+<ul>
+<li>好啦其實該使用者在登入之後還是可以從 project 列表的頁面看到你有邀請他，他可以在那邊點選「接受邀請」</li>
+</ul>
+</li>
+<li>admin 使用者能查看所有在這台 Overleaf server 上的 project，即便這個 project 沒有被設為公開，或該 admin 使用者沒有被加入這個 project 的共用名單</li>
+<li>你可能想要在 Overleaf 上加好友或傳送訊息給別人之類的（好你可能也不想）</li>
+</ul>
+<h4 id="裝-latex-的各種套件">裝 LaTeX 的各種套件</h4>
+<p>在開始之前，我們先來編看看一個 LaTeX 檔案好了。登入我們自己架的 Overleaf 之後開啟一個空白 project，輸入以下的簡單 .tex 檔案：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-latex" data-lang="latex"><span style="display:flex;"><span><span style="color:#66d9ef">\documentclass</span>{article}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">\usepackage</span>{xcolor}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">\begin</span>{document}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">\textcolor</span>{blue}{blue text.}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">\end</span>{document}
+</span></span></code></pre></div><p><code>xcolor</code> 是一個很基本的套件，可以用來設定文字顏色，但我們自己架的 Overleaf server 吐了 <code>LaTeX Error: File 'xcolor.sty' not found.</code> 給我們：</p>
+<p><img src="../../images/20240212/package-not-found.png" alt=""></p>
+<p>Overleaf 的 LaTeX 套件是用 <a href="https://www.tug.org/texlive/tlmgr.html">tlmgr (TeX Live package manager)</a> 來管理的。我們可以參考 <a href="https://github.com/overleaf/toolkit/blob/master/doc/ce-upgrading-texlive.md">官方 wiki</a> 的教學手動進到 Overleaf 的 container 裡面裝套件，但這樣做的話每次重新 build 或更新 overleaf 版本的時候就都要手動重複一樣的工作，聽起來就超糟的。</p>
+<p>overleaf-toolkit 其實有幫我們寫好 docker compose 的 yaml 檔了，所以我們執行 <code>bin/up</code> 的時候才能這麼順暢地把 Overleaf server 跑起來。事實上，如果去讀 toolkit 的 source code 的話，會發現其實我們是拿 <a href="https://hub.docker.com/r/sharelatex/sharelatex">官方 docker image</a> 來跑。也就是說，我們其實可以自己寫一個 Dockerfile，以官方 image 為基底加上一些我們自己的新功能或 patch，最後再讓 toolkit 去把我們的新 image 跑起來，這樣就可以做到我們想要的各種新功能了！</p>
+<p>那馬上就來把手弄髒吧～</p>
+<p>首先，在 <code>config/</code> 底下新增一個 <code>docker-compose.override.yml</code> 的檔案，裡面放這些內容：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span><span style="color:#f92672">version</span>: <span style="color:#e6db74">&#39;2.2&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">services</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">sharelatex</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">image</span>: <span style="color:#ae81ff">sharelatex/sharelatex:chiffon-1.0</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">build</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">context</span>: <span style="color:#ae81ff">..</span> <span style="color:#75715e"># the root directory of the project</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">dockerfile</span>: <span style="color:#ae81ff">./src/Dockerfile</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">args</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">SRC_PATH</span>: <span style="color:#ae81ff">./src</span>
+</span></span></code></pre></div><blockquote>
+<p>Note: <code>args: SRC_PATH: ./src</code> 這兩行的功能跟後面新增其他功能有關，雖然跟現在無關但為了方便起見現在一起先加到檔案裡。</p>
+</blockquote>
+<p>接著在 project root directory 新增一個資料夾 <code>src/</code>，在裡面加入一個 <code>Dockerfile</code>，放以下內容：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dockerfile" data-lang="dockerfile"><span style="display:flex;"><span><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> sharelatex/sharelatex:4.2.2</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> tlmgr update --self --all<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e"># install full latex packages, takes VERY VERY long time</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> tlmgr install scheme-full<span style="color:#960050;background-color:#1e0010">
+</span></span></span></code></pre></div><blockquote>
+<p>Note 1: <code>tlmgr install scheme-full</code> 會把 <strong>所有</strong> TeX Live 的套件 <strong>全部</strong> 安裝好，這會花上 <strong>很久很久</strong>（在我的電腦上要跑 40 分鐘）。如果你不想裝所有的套件，可以先看看 <code>tlmgr info schemes</code> 或是 <code>tlmgr info collections</code> 的輸出來決定自己是不是只想要裝某些 subset 的套件。例如你可能只想要 <code>tlmgr install scheme-small</code> 或是 <code>tlmgr install collection-xetex collection-langcjk collection-mathscience</code> 而已。</p>
+</blockquote>
+<blockquote>
+<p>Note 2: 懶人包：把 <code>tlmgr install scheme-full</code> 改成 <code>tlmgr install scheme-small</code> 可以大幅減少你的 docker build 時間，也可以讓接下來的教學文順利 demo 成功。</p>
+</blockquote>
+<p>這時你的資料夾結構可能長這樣：</p>
+<pre tabindex="0"><code>overleaf-toolkit/
+├── .github/
+├── bin/
+├── config/
+│   ├── docker-compose.override.yml
+│   └── ...
+├── data/
+├── doc/
+├── lib/
+├── src/
+│   └── Dockerfile
+├── .gitignore
+└── ...
+</code></pre><p>接下來就可以執行 <code>bin/docker-compose up --build</code> 來重新 build 一次我們的 Overleaf service 了（如果你想要 detach from docker-compose 的話，可以加 <code>-d</code> 的參數。總之就是把 <code>bin/docker-compose</code> 當一般的 docker compose 來用即可）。</p>
+<p>重開好之後再登入，重新編譯一次我們的檔案：</p>
+<p><img src="../../images/20240212/package-found.png" alt=""></p>
+<p>輕鬆簡單是吧（其實也還好</p>
+<hr>
+<h2 id="總結--預告">總結 &amp; 預告</h2>
+<p>在這篇文章中，我介紹了自架 Overleaf 的方法，並鋪陳了如何讓 overleaf-toolkit 使用我們自己 patch 過後的 docker image。在接下來的文章，我要介紹如何修改 Overleaf 的登入驗證邏輯，以達到「首次登入即註冊」的功能。說不定顯示 project invitation link 的功能也會一併放送給大家。</p>
+<p>感謝閱讀。</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<hr>
+<h2 id="後記">後記</h2>
+<p>本來在本文中想要用 LaTeX 語法打出 LaTeX 的 logo，但要讓 hugo 顯示 $\LaTeX$ 好像沒有那麼單純。隨手搜尋了一下 &ldquo;enable latex in hugo&rdquo;，竟發現搜尋結果第三項是另一友人 <a href="https://www.vincentthh35.com/">Vincent Hsieh</a>，讓我驚覺身旁的友人都各自有其事業，我也該更努力一點。</p>
+<p><img src="../../images/20240212/google-search.png" alt=""></p>
+<ul class="pa0">
+  
+</ul>
+<div class="mt6 instapaper_ignoref">
+      
+      
+      </div>
+    </div>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://ktpss95112.github.io/my-blog/" >
+    &copy;  Chiffoncake's Blog 2024 
+  </a>
+    <div>
+<div class="ananke-socials">
+  
+</div>
+</div>
+  </div>
+</footer>
+
+  </body>
+</html>
