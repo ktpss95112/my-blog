@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>自架 Overleaf (2) | Chiffoncake&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="description" content="[TOC]
+前言 這篇是接續著前一篇「自架 Overleaf (1)」，要帶大家來幫自架的 Overleaf 加一些好料的。
+（這個部落格現在真的是很醜，反正未來的某個時間一定會改善的，請眾讀者原諒。）
+正文 先幫大家複習一下 Overleaf community edition 有哪些不方便的地方：
+註冊新使用者很不方便 admin panel 資訊和功能很少 project 新增協作者時不會顯示「接受邀請的連結」 接下來將以這些不便之處為出發點，帶大家來 patch 這些功能。啊因為寫的當下有些東西我也還沒想過要怎麼改，所以沒有保證每個提出來的問題都會解決（不負責任的人）
+本篇我所修改過的 code 都可以在 我的 repo 找到。
+「首次登入即自動註冊」的功能 既然要加新功能，那我們就得要直接挖進 Overleaf server 的 source code 了。把 Overleaf 的 repo clone 下來，發揮一點逆向工程的精神（其實就只是讀別人 source code 而已講那麼高級），可以發現幾個我們有興趣的檔案：
+services/web/app/src/Features/Authentication/AuthenticationManager.js authenticate() 函數負責處理使用者的登入請求，會呼叫 _checkUserPassword() 來檢查帳密 _checkUserPassword() 試圖從 mongodb 裡找到該使用者的登入資訊並比對 services/web/app/src/Features/User/UserRegistrationHandler.js 這個檔案提供了註冊新使用者的 registerNewUser() 函數 所以看起來，我們只要在 AuthenticationManager._checkUserPassword() 裡面加上「找不到使用者的話就呼叫 UserRegistrationHandler.registerNewUser() 幫他註冊」的功能就解決了。
+仔細讀了一下 AuthenticationManager.js，發現在這個檔案裡完全沒有 async/await 或 Promise 的存在，全部都是 callback 地獄。我們要對 AuthenticationManager.">
+    <meta name="generator" content="Hugo 0.122.0">
+    
+    
+    
+    
+      <meta name="robots" content="noindex, nofollow">
+    
+
+    
+<link rel="stylesheet" href="/my-blog/ananke/css/main.min.css" >
+
+
+
+    
+    
+    
+      
+
+    
+
+    
+    
+    <meta property="og:title" content="自架 Overleaf (2)" />
+<meta property="og:description" content="[TOC]
+前言 這篇是接續著前一篇「自架 Overleaf (1)」，要帶大家來幫自架的 Overleaf 加一些好料的。
+（這個部落格現在真的是很醜，反正未來的某個時間一定會改善的，請眾讀者原諒。）
+正文 先幫大家複習一下 Overleaf community edition 有哪些不方便的地方：
+註冊新使用者很不方便 admin panel 資訊和功能很少 project 新增協作者時不會顯示「接受邀請的連結」 接下來將以這些不便之處為出發點，帶大家來 patch 這些功能。啊因為寫的當下有些東西我也還沒想過要怎麼改，所以沒有保證每個提出來的問題都會解決（不負責任的人）
+本篇我所修改過的 code 都可以在 我的 repo 找到。
+「首次登入即自動註冊」的功能 既然要加新功能，那我們就得要直接挖進 Overleaf server 的 source code 了。把 Overleaf 的 repo clone 下來，發揮一點逆向工程的精神（其實就只是讀別人 source code 而已講那麼高級），可以發現幾個我們有興趣的檔案：
+services/web/app/src/Features/Authentication/AuthenticationManager.js authenticate() 函數負責處理使用者的登入請求，會呼叫 _checkUserPassword() 來檢查帳密 _checkUserPassword() 試圖從 mongodb 裡找到該使用者的登入資訊並比對 services/web/app/src/Features/User/UserRegistrationHandler.js 這個檔案提供了註冊新使用者的 registerNewUser() 函數 所以看起來，我們只要在 AuthenticationManager._checkUserPassword() 裡面加上「找不到使用者的話就呼叫 UserRegistrationHandler.registerNewUser() 幫他註冊」的功能就解決了。
+仔細讀了一下 AuthenticationManager.js，發現在這個檔案裡完全沒有 async/await 或 Promise 的存在，全部都是 callback 地獄。我們要對 AuthenticationManager." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ktpss95112.github.io/my-blog/posts/20240213-overleaf-2/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2024-02-13T10:44:01+08:00" />
+<meta property="article:modified_time" content="2024-02-13T10:44:01+08:00" />
+
+<meta itemprop="name" content="自架 Overleaf (2)">
+<meta itemprop="description" content="[TOC]
+前言 這篇是接續著前一篇「自架 Overleaf (1)」，要帶大家來幫自架的 Overleaf 加一些好料的。
+（這個部落格現在真的是很醜，反正未來的某個時間一定會改善的，請眾讀者原諒。）
+正文 先幫大家複習一下 Overleaf community edition 有哪些不方便的地方：
+註冊新使用者很不方便 admin panel 資訊和功能很少 project 新增協作者時不會顯示「接受邀請的連結」 接下來將以這些不便之處為出發點，帶大家來 patch 這些功能。啊因為寫的當下有些東西我也還沒想過要怎麼改，所以沒有保證每個提出來的問題都會解決（不負責任的人）
+本篇我所修改過的 code 都可以在 我的 repo 找到。
+「首次登入即自動註冊」的功能 既然要加新功能，那我們就得要直接挖進 Overleaf server 的 source code 了。把 Overleaf 的 repo clone 下來，發揮一點逆向工程的精神（其實就只是讀別人 source code 而已講那麼高級），可以發現幾個我們有興趣的檔案：
+services/web/app/src/Features/Authentication/AuthenticationManager.js authenticate() 函數負責處理使用者的登入請求，會呼叫 _checkUserPassword() 來檢查帳密 _checkUserPassword() 試圖從 mongodb 裡找到該使用者的登入資訊並比對 services/web/app/src/Features/User/UserRegistrationHandler.js 這個檔案提供了註冊新使用者的 registerNewUser() 函數 所以看起來，我們只要在 AuthenticationManager._checkUserPassword() 裡面加上「找不到使用者的話就呼叫 UserRegistrationHandler.registerNewUser() 幫他註冊」的功能就解決了。
+仔細讀了一下 AuthenticationManager.js，發現在這個檔案裡完全沒有 async/await 或 Promise 的存在，全部都是 callback 地獄。我們要對 AuthenticationManager."><meta itemprop="datePublished" content="2024-02-13T10:44:01+08:00" />
+<meta itemprop="dateModified" content="2024-02-13T10:44:01+08:00" />
+<meta itemprop="wordCount" content="764">
+<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="自架 Overleaf (2)"/>
+<meta name="twitter:description" content="[TOC]
+前言 這篇是接續著前一篇「自架 Overleaf (1)」，要帶大家來幫自架的 Overleaf 加一些好料的。
+（這個部落格現在真的是很醜，反正未來的某個時間一定會改善的，請眾讀者原諒。）
+正文 先幫大家複習一下 Overleaf community edition 有哪些不方便的地方：
+註冊新使用者很不方便 admin panel 資訊和功能很少 project 新增協作者時不會顯示「接受邀請的連結」 接下來將以這些不便之處為出發點，帶大家來 patch 這些功能。啊因為寫的當下有些東西我也還沒想過要怎麼改，所以沒有保證每個提出來的問題都會解決（不負責任的人）
+本篇我所修改過的 code 都可以在 我的 repo 找到。
+「首次登入即自動註冊」的功能 既然要加新功能，那我們就得要直接挖進 Overleaf server 的 source code 了。把 Overleaf 的 repo clone 下來，發揮一點逆向工程的精神（其實就只是讀別人 source code 而已講那麼高級），可以發現幾個我們有興趣的檔案：
+services/web/app/src/Features/Authentication/AuthenticationManager.js authenticate() 函數負責處理使用者的登入請求，會呼叫 _checkUserPassword() 來檢查帳密 _checkUserPassword() 試圖從 mongodb 裡找到該使用者的登入資訊並比對 services/web/app/src/Features/User/UserRegistrationHandler.js 這個檔案提供了註冊新使用者的 registerNewUser() 函數 所以看起來，我們只要在 AuthenticationManager._checkUserPassword() 裡面加上「找不到使用者的話就呼叫 UserRegistrationHandler.registerNewUser() 幫他註冊」的功能就解決了。
+仔細讀了一下 AuthenticationManager.js，發現在這個檔案裡完全沒有 async/await 或 Promise 的存在，全部都是 callback 地獄。我們要對 AuthenticationManager."/>
+
+	
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="/my-blog/" class="f3 fw2 hover-white no-underline white-90 dib">
+      
+        Chiffoncake&#39;s Blog
+      
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+      
+<div class="ananke-socials">
+  
+</div>
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  <article class="flex-l flex-wrap justify-between mw8 center ph3">
+    <header class="mt4 w-100">
+      <aside class="instapaper_ignoref b helvetica tracked">
+          
+        POSTS
+      </aside>
+      
+
+
+
+
+
+
+
+
+
+
+  <div id="sharing" class="mt3 ananke-socials">
+    
+  </div>
+
+
+      <h1 class="f1 athelas mt3 mb1">自架 Overleaf (2)</h1>
+      
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2024-02-13T10:44:01+08:00">February 13, 2024</time>
+      
+
+      
+      
+    </header>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links mid-gray pr4-l w-two-thirds-l"><p>[TOC]</p>
+<h2 id="前言">前言</h2>
+<p>這篇是接續著前一篇「自架 Overleaf (1)」，要帶大家來幫自架的 Overleaf 加一些好料的。</p>
+<p><em>（這個部落格現在真的是很醜，反正未來的某個時間一定會改善的，請眾讀者原諒。）</em></p>
+<hr>
+<h2 id="正文">正文</h2>
+<p>先幫大家複習一下 Overleaf community edition 有哪些不方便的地方：</p>
+<ul>
+<li>註冊新使用者很不方便</li>
+<li>admin panel 資訊和功能很少</li>
+<li>project 新增協作者時不會顯示「接受邀請的連結」</li>
+</ul>
+<p>接下來將以這些不便之處為出發點，帶大家來 patch 這些功能。啊因為寫的當下有些東西我也還沒想過要怎麼改，所以沒有保證每個提出來的問題都會解決（不負責任的人）</p>
+<p>本篇我所修改過的 code 都可以在 <a href="https://github.com/ktpss95112/overleaf-toolkit">我的 repo</a> 找到。</p>
+<hr>
+<h3 id="首次登入即自動註冊的功能">「首次登入即自動註冊」的功能</h3>
+<p>既然要加新功能，那我們就得要直接挖進 Overleaf server 的 source code 了。把 <a href="https://github.com/overleaf/overleaf">Overleaf 的 repo</a> clone 下來，發揮一點逆向工程的精神（其實就只是讀別人 source code 而已講那麼高級），可以發現幾個我們有興趣的檔案：</p>
+<ul>
+<li><code>services/web/app/src/Features/Authentication/AuthenticationManager.js</code>
+<ul>
+<li><code>authenticate()</code> 函數負責處理使用者的登入請求，會呼叫 <code>_checkUserPassword()</code> 來檢查帳密</li>
+<li><code>_checkUserPassword()</code> 試圖從 mongodb 裡找到該使用者的登入資訊並比對</li>
+</ul>
+</li>
+<li><code>services/web/app/src/Features/User/UserRegistrationHandler.js</code>
+<ul>
+<li>這個檔案提供了註冊新使用者的 <code>registerNewUser()</code> 函數</li>
+</ul>
+</li>
+</ul>
+<p>所以看起來，我們只要在 <code>AuthenticationManager._checkUserPassword()</code> 裡面加上「找不到使用者的話就呼叫 <code>UserRegistrationHandler.registerNewUser()</code> 幫他註冊」的功能就解決了。</p>
+<p>仔細讀了一下 <code>AuthenticationManager.js</code>，發現在這個檔案裡完全沒有 async/await 或 Promise 的存在，全部都是 <a href="https://dev.to/jerrycode06/callback-hell-and-how-to-rescue-it-ggj">callback 地獄</a>。我們要對 <code>AuthenticationManager.js</code> 做的修改是「在一進 <code>_checkUserPassword()</code> 就檢查使用者存不存在，不存在的話幫他註冊」，也就是說我們只想加一個註冊的邏輯，不想改他的驗證邏輯。這時我們遇到了幾個語法上的選擇：</p>
+<ol>
+<li>加入 callback 地獄，把 <a href="https://github.com/overleaf/overleaf/blob/6d98d6a7c0fa51c9615ececd747889f6a0dee14a/services/web/app/src/Features/Authentication/AuthenticationManager.js#L66-L118">這 50 幾行 code</a> 全部按一個 tab，讓他成為我們檢查使用者存不存在的 callback
+<ul>
+<li>大概像這樣：
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#a6e22e">_checkUserPassword</span>(<span style="color:#a6e22e">query</span>, <span style="color:#a6e22e">password</span>, <span style="color:#a6e22e">callback</span>) {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">User</span>.<span style="color:#a6e22e">findOne</span>(<span style="color:#a6e22e">query</span>, (<span style="color:#a6e22e">error</span>, <span style="color:#a6e22e">user</span>) =&gt; {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 我們檢查使用者存不存在
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// 不存在的話就幫他註冊
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/* 原本 _checkUserPassword() 的 code 原封不動放這下面 */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Using Mongoose for legacy reasons here. The returned User instance
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// gets serialized into the session and there may be subtle differences
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// between the user returned by Mongoose vs mongodb (such as default values)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">User</span>.<span style="color:#a6e22e">findOne</span>(<span style="color:#a6e22e">query</span>, (<span style="color:#a6e22e">error</span>, <span style="color:#a6e22e">user</span>) =&gt; {
+</span></span><span style="display:flex;"><span>      ...
+</span></span><span style="display:flex;"><span>    })
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div></li>
+<li>我們真正新增的功能大概就 10 幾行 code，而已，這個縮排有 50 幾行，所以 commit 紀錄裡面會有超過 80% 的 code 都是不重要的更動，真棒真乾淨（才沒有</li>
+</ul>
+</li>
+<li>把 <code>authenticate()</code> 和 <code>_checkUserPassword()</code> 都 refactor 成 async/await 的寫法，免除 commit 紀錄裡 50 幾行只有 tab 的更動
+<ul>
+<li>大概像這樣：
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">async</span> <span style="color:#a6e22e">_checkUserPassword</span>(<span style="color:#a6e22e">query</span>, <span style="color:#a6e22e">password</span>) {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#66d9ef">await</span> <span style="color:#a6e22e">User</span>.<span style="color:#a6e22e">findOneAsync</span>(<span style="color:#a6e22e">query</span>)) {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 註冊新使用者
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">/* 原本 _checkUserPassword() 的 code 稍微改一下放這下面 */</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// Using Mongoose for legacy reasons here. The returned User instance
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e">// gets serialized into the session and there may be subtle differences
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e">// between the user returned by Mongoose vs mongodb (such as default values)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">user</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">User</span>.<span style="color:#a6e22e">findOneAsync</span>(<span style="color:#a6e22e">query</span>);
+</span></span><span style="display:flex;"><span>  ...
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div></li>
+<li>好你這樣還要改其他會 call 到 <code>_checkUserPassword()</code> 的所有地方，而且要記得在對的地方加 try/catch block 來做到原本有的 error handling 的功能</li>
+</ul>
+</li>
+<li>把原本的 <code>_checkUserPassword()</code> 改名，然後自己再寫一個 <code>_checkUserPassword()</code>。有點類似 hook 掉原本函數的概念
+<ul>
+<li>大概像這樣：
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#a6e22e">_checkUserPassword</span>(<span style="color:#a6e22e">query</span>, <span style="color:#a6e22e">password</span>, <span style="color:#a6e22e">callback</span>) {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">User</span>.<span style="color:#a6e22e">findOne</span>(<span style="color:#a6e22e">query</span>, (<span style="color:#a6e22e">error</span>, <span style="color:#a6e22e">user</span>) =&gt; {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 我們檢查使用者存不存在
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// 不存在的話就幫他註冊
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">_checkUserPasswordOriginal</span>(<span style="color:#a6e22e">query</span>, <span style="color:#a6e22e">passwword</span>, <span style="color:#a6e22e">callback</span>);
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>},
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/* 原本 _checkUserPassword() 的函數 rename，原封不動放這下面 */</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">_checkUserPasswordOriginal</span>(<span style="color:#a6e22e">query</span>, <span style="color:#a6e22e">password</span>, <span style="color:#a6e22e">callback</span>) {
+</span></span><span style="display:flex;"><span>  ...
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div></li>
+</ul>
+</li>
+</ol>
+<p>顯然最後一種最乾淨。</p>
+<p>首先我們先把 Overleaf 裡的 <code>AuthenticationManager.js</code> 複製到在上次 toolkit 裡的 <code>src/</code> 資料夾中，再編輯 <code>src/Dockerfile</code> 在下面加上兩行：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dockerfile" data-lang="dockerfile"><span style="display:flex;"><span><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> sharelatex/sharelatex:4.2.2</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> tlmgr update --self --all<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e"># install full latex packages, takes VERY VERY long time</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> tlmgr install scheme-full<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">ARG</span> SRC_PATH<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> <span style="color:#e6db74">${</span>SRC_PATH<span style="color:#e6db74">}</span>/AuthenticationManager.js /overleaf/services/web/app/src/Features/Authentication/AuthenticationManager.js<span style="color:#960050;background-color:#1e0010">
+</span></span></span></code></pre></div><blockquote>
+<p>Note: 上次在 <code>config/docker-compose.override.yml</code> 裡有放的 build argument <code>SRC_PATH</code> 就是要在這邊用的。</p>
+</blockquote>
+<p>接著改 <code>src/AuthenticationManager.js</code> 裡的 <code>_checkUserPassword()</code> 函數：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">AuthenticationManager</span> <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">_checkUserPassword</span>(<span style="color:#a6e22e">query</span>, <span style="color:#a6e22e">password</span>, <span style="color:#a6e22e">callback</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// check if user exists, create a new user if not
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">User</span>.<span style="color:#a6e22e">findOne</span>(<span style="color:#a6e22e">query</span>, (<span style="color:#a6e22e">error</span>, <span style="color:#a6e22e">user</span>) =&gt; {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">error</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">callback</span>(<span style="color:#a6e22e">error</span>);
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">user</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// user not exists, create a new user
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">UserRegistrationHandler</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#39;../User/UserRegistrationHandler&#39;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">userDetail</span> <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>          <span style="color:#a6e22e">email</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">query</span>.<span style="color:#a6e22e">email</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#a6e22e">password</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">password</span>,
+</span></span><span style="display:flex;"><span>        };
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">UserRegistrationHandler</span>.<span style="color:#a6e22e">registerNewUser</span>(<span style="color:#a6e22e">userDetail</span>, (<span style="color:#a6e22e">err</span>, <span style="color:#a6e22e">user</span>) =&gt; {
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">err</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">callback</span>(<span style="color:#a6e22e">err</span>);
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>          <span style="color:#a6e22e">AuthenticationManager</span>.<span style="color:#a6e22e">_checkUserPasswordOriginal</span>(<span style="color:#a6e22e">query</span>, <span style="color:#a6e22e">password</span>, <span style="color:#a6e22e">callback</span>);
+</span></span><span style="display:flex;"><span>        });
+</span></span><span style="display:flex;"><span>      } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">AuthenticationManager</span>.<span style="color:#a6e22e">_checkUserPasswordOriginal</span>(<span style="color:#a6e22e">query</span>, <span style="color:#a6e22e">password</span>, <span style="color:#a6e22e">callback</span>);
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    })
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">_checkUserPasswordOriginal</span>(<span style="color:#a6e22e">query</span>, <span style="color:#a6e22e">password</span>, <span style="color:#a6e22e">callback</span>) {
+</span></span><span style="display:flex;"><span>    ...
+</span></span></code></pre></div><p>附一下現在的 directory structure：（其實就是多了一個 <code>AuthenticationManager.js</code> 而已）</p>
+<pre tabindex="0"><code>overleaf-toolkit/
+├── .github/
+├── bin/
+├── config/
+│   ├── .gitkeep
+│   ├── docker-compose.override.yml
+│   └── ...
+├── data/
+├── doc/
+├── lib/
+├── src/
+│   ├── Dockerfile
+│   └── AuthenticationManager.js
+├── .gitignore
+└── ...
+</code></pre><p>用 <code>bin/docker-compose up --build -d</code> 重新 build server，再到登入頁面隨便輸入一個沒註冊過的帳號密碼。</p>
+<ul>
+<li>email: <code>chiffon@example.com</code></li>
+<li>password: <code>12345678</code></li>
+</ul>
+<p><img src="../../images/20240213/login-success.png" alt=""></p>
+<blockquote>
+<p>Note: 如果 email 輸入 <code>chiffon@localhost</code> 的話，網站會跳出 <code>Something went wrong. Please try again.</code> 的錯誤訊息。用 <code>bin/logs -n all web</code> 看錯誤訊息，會發現錯誤發生在 <code>registerNewUser()</code> 的 <a href="https://github.com/overleaf/overleaf/blob/6d98d6a7c0fa51c9615ececd747889f6a0dee14a/services/web/app/src/Features/User/UserRegistrationHandler.js#L47">這行</a>。繼續追下去的話，會發現 <code>chiffon@localhost</code> 不是 <a href="https://github.com/overleaf/overleaf/blob/6d98d6a7c0fa51c9615ececd747889f6a0dee14a/services/web/app/src/Features/Helpers/EmailHelper.js#L6">合法的 email address</a>，所以註冊的請求才會失敗。</p>
+</blockquote>
+<p>用 <code>bin/mongo</code> 進到 mongo 的 shell，輸入 <code>db.users.find({email: 'chiffon@example.com'}).pretty()</code>，可以看到確實成功註冊了新的使用者。web 界面登出之後，如果嘗試用錯的密碼登入，會顯示密碼錯誤的訊息，也表示我們成功註冊了使用者。</p>
+<blockquote>
+<p>Note: 既然已經知道驗證使用者登入的邏輯放在哪個函數裡，我們就可以自己實做其他登入功能，例如 LDAP 和 OAuth 的登入方法。（其實 LDAP 的功能在付費版的 <a href="https://github.com/overleaf/overleaf/wiki/Server-Pro:-LDAP-Config">Overleaf Server Pro</a> 有提供，但 GitHub 上搜尋 &ldquo;overleaf ldap&rdquo; 的話也找得到一些其他人 fork 的 project。本系列文章就是受到那些 project 的啟發而產生的）</p>
+</blockquote>
+<hr>
+<h3 id="讓使用者用-username-而不是-email-註冊">讓使用者用 username 而不是 email 註冊</h3>
+<p>事實上，我們的 Overleaf server 沒有開啟可以寄 email 的功能，所以其實我們可以不用要求使用者一定要用 email 來註冊。又或是如果我們想要在前一個步驟把登入的驗證外包給其他服務（例如 LDAP 之類的），那也可能不一定有 email 的資訊可以用。最單純的改法可能在註冊的時候去跳過 email 的檢查，這個作法乍看之下最簡單，不用去改動到 database 的 schema 或是 Overleaf 的 model，但仔細爬了一下 source code，會發現除了在註冊的地方之外，還有很多其他地方都還是要檢查 email 的格式，例如邀請協作者、密碼重設、更新使用者資訊等地方，所以單純 patch 掉註冊處的 email 檢查會造成這些功能都無法正常運作。</p>
+<p>我自己嘗試過的 patch 方法是我們將使用者輸入的 username 加上一串 email suffix 再拿去註冊，這樣就可以造成一個假象：對使用者來說他是用 username 來註冊，但對 Overleaf 來說他是用合法的 email 在處理這個使用者。可以加在前端（前端 <code>&lt;form&gt;</code> 送出 POST 的時候幫 username 加 email suffix），也可以在後端的 <code>AuthenticationManager.authenticate()</code> 去修改 <code>query.email</code> 的值（加一行 <code>query.email = query.email + '@example.com'</code> 之類的在函數一開頭）。雖然兩種 patch 的方法都可以做到讓使用者用 username 登入，但我們很在乎的一項功能——邀請協作者——就沒辦法用 username 來做到，除非我們也 patch 邀請協作者那部份的 code。</p>
+<p>比較完整的 patch 方法可能是多出一個註冊的頁面，讓使用者在註冊時填寫 username, email, password，並將 username 也存到 database 中。這樣登入時可以選擇用 username 來搜尋 database，也不會與其他需要用到 email 的功能互相衝突。但是，這種作法要改動到的 code 比較多，會包含 user 的 model，建立一個註冊帳號專用的前後端，還有登入的邏輯。要改的東西太多了，那就改天吧（懶人用爛梗）</p>
+<p>有興趣者歡迎與我討論細節。</p>
+<hr>
+<h3 id="停用-launchpad-的功能">停用 launchpad 的功能</h3>
+<p>在先前的章節，我們已經做到可以在首次登入時自動註冊使用者了。如此一來，在整個 server 第一次啟動以來，我們似乎沒有創建 admin 使用者的必要性。然而，爬一下 Overleaf 的 <a href="https://github.com/overleaf/overleaf/blob/6d98d6a7c0fa51c9615ececd747889f6a0dee14a/services/web/modules/launchpad/app/src/LaunchpadController.js#L48">source code</a>，會發現如果 database 當中沒有任何 admin 使用者的存在，launchpad 就一直都可以被存取。稍微做個小實驗，把 toolkit 資料夾下的 <code>data/</code> 清空（可能需要 root 權限，因為裡面都是透過 docker volume 存的資料），再重新啟動 Overleaf server，隨便創幾個使用者之後再前往 <code>http://localhost:8080/launchpad</code>（請自行修改 URL 以符合你自己部署的環境），會發現這個 endpoint 仍然可以被存取。也就是說，任何一個可以連到你 server 的路人都可以把這個「創第一個 admin 使用者」的名額用掉。</p>
+<p>要把 launchpad 的功能關掉其實超單純，直接上 code：</p>
+<ul>
+<li>複製 <code>services/web/modules/launchpad/app/src/LaunchpadRouter.js</code> 到 toolkit 的 <code>src/</code> 裡，直接把 <code>apply()</code> 的函數 return 掉：
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#a6e22e">module</span>.<span style="color:#a6e22e">exports</span> <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">apply</span>(<span style="color:#a6e22e">webRouter</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span>; <span style="color:#75715e">// add this new line to disable launchpad
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>    ...
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div></li>
+<li>改動 Dockerfile，在最後面新增 <code>LaunchpadRouter.js</code>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dockerfile" data-lang="dockerfile"><span style="display:flex;"><span>...<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> <span style="color:#e6db74">${</span>SRC_PATH<span style="color:#e6db74">}</span>/AuthenticationManager.js /overleaf/services/web/app/src/Features/Authentication/AuthenticationManager.js<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> <span style="color:#e6db74">${</span>SRC_PATH<span style="color:#e6db74">}</span>/LaunchpadRouter.js /overleaf/services/web/modules/launchpad/app/src/LaunchpadRouter.js<span style="color:#960050;background-color:#1e0010">
+</span></span></span></code></pre></div></li>
+</ul>
+<p>好了之後就可以 <code>bin/docker-compose up --build -d</code> 來重 build 一次。開好之後可以前往 launchpad 測試看看，應該會發現 404 或 redirect 回首頁。</p>
+<blockquote>
+<p>Note: 如果發現清空 <code>data/*</code> 之後 <code>bin/docker-compose logs sharelatex</code> 出現了沒辦法連接上 mongo 的錯誤訊息，有可能需要參考 <a href="https://github.com/overleaf/overleaf/issues/1120#issuecomment-1623295314">issue</a> 解決。</p>
+</blockquote>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<hr>
+<h2 id="總結--預告">總結 &amp; 預告</h2>
+<p>在這篇文章中，我們延續了上篇的架構，開始深入地挖進 Overleaf 的 source code，找到目標功能的程式碼並嘗試 patch 成我們想要的功能。具體而言有「首次登入即註冊」和「停用 launchpad」兩個功能。這兩個功能都只有牽涉到網頁中的後端的程式碼。</p>
+<p>在下一篇，我將帶大家一起嘗試修改前端的內容，也就是如何在邀請別人加入 project 協作者的時候，可以從前端複製接受該邀請的連結。</p>
+<p>感謝閱讀。</p>
+<hr>
+<h2 id="後記">後記</h2>
+<p>本來是打算在一天內把剩的想寫的東西全部放在這篇裡面趕快結束掉，但沒想到真的要寫文章的時候發現有好多細節本來沒考慮清楚，就花了比想像中多的時間泡在 source code 裡。更慘的是，我有嘗試要做顯示連結的功能，但前端的 code 似乎不像後端的 code 一樣，改了再 rebuild 就可以跑起來。我猜 React 那些前端一定在哪裡事先都編好了，我在 Dockerfile 裡 patch 東西根本沒反應。慟扣。</p>
+<p>希望我真的會把第三篇寫出來。看前端好累。</p>
+<ul class="pa0">
+  
+</ul>
+<div class="mt6 instapaper_ignoref">
+      
+      
+      </div>
+    </div>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://ktpss95112.github.io/my-blog/" >
+    &copy;  Chiffoncake's Blog 2024 
+  </a>
+    <div>
+<div class="ananke-socials">
+  
+</div>
+</div>
+  </div>
+</footer>
+
+  </body>
+</html>

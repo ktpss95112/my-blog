@@ -60,7 +60,7 @@ overleaf: Overleaf 整個服務的 source code overleaf-toolkit: 自架 Overleaf
 overleaf: Overleaf 整個服務的 source code overleaf-toolkit: 自架 Overleaf 的便利工具 在 Overleaf 的 Wiki 上有關於硬體設備的建議：
 最低要求 2 core 和 3 GB memory &hellip; 大約支援 5 個使用者同時在線 每 5~10 個使用者大約需要 1 core 和 1 GB memory，「大約」而已 LaTeX 是一個 single threaded program，所以編譯 PDF 的速度取決於單一 cpu 的強度 &hellip; 還是存在著一種可能性是自架的 Overleaf 的編譯速度比 overleaf."><meta itemprop="datePublished" content="2024-02-12T16:19:04+08:00" />
 <meta itemprop="dateModified" content="2024-02-12T16:19:04+08:00" />
-<meta itemprop="wordCount" content="608">
+<meta itemprop="wordCount" content="609">
 <meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="自架 Overleaf (1)"/>
 <meta name="twitter:description" content="[TOC]
 前言 感謝吾友 James Hsu 頻頻 掛念 鄙人的部落格，期望以此文感謝他對我的重視。
@@ -185,7 +185,7 @@ overleaf: Overleaf 整個服務的 source code overleaf-toolkit: 自架 Overleaf
 <p>Note 1: 我有在 Proxmox VE 開一台虛擬機測試，如果執行上面指令看到 <code>bin/up</code> 輸出 mongo service 的狀態是 error 而不是 running 或 healthy，可以打 <code>bin/docker-compose logs mongo</code> 來看 mongo service 的錯誤訊息，會發現可能是 mongo 抱怨 cpu 沒有支援 AVX 的指令集。Google 到的解決方法是把 Proxmox VE 虛擬機的 cpu type 設定成 host，因為預設的 qemu cpu 沒有支援 AVX。</p>
 </blockquote>
 <blockquote>
-<p>Note 2: 如果遇到 mongo service 一樣還是開不起來，錯誤訊息有 <code>IllegalOperation</code> 或是 <code>/etc/my_init.d/</code> 什麼的，那可能是遇到 mongo db 沒有正常 initialize 的問題。解決方法請參考 <a href="https://github.com/overleaf/overleaf/issues/1120#issuecomment-1623295314">issue</a>。</p>
+<p>Note 2: 如果打 <code>bin/docker-compose logs sharelatex</code> 發現沒辦法連接到 mongo 或是錯誤訊息有 <code>/etc/my_init.d/</code> 什麼的，那可能是遇到 mongo db 沒有正常 initialize 的問題。解決方法請參考 <a href="https://github.com/overleaf/overleaf/issues/1120#issuecomment-1623295314">issue</a>。</p>
 </blockquote>
 <p>幾個你可能會想要改的東西（全部資訊請看 <a href="https://github.com/overleaf/toolkit/blob/master/doc/overleaf-rc.md">wiki</a> 和 <a href="https://github.com/overleaf/overleaf/wiki/Configuring-Overleaf">wiki</a>）：</p>
 <ul>

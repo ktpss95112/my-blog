@@ -93,6 +93,31 @@
   <div class="bg-white mb3 pa4 gray overflow-hidden">
     <span class="f6 db">Posts</span>
     <h1 class="f3 near-black">
+      <a href="/my-blog/posts/20240213-overleaf-2/" class="link black dim">
+        自架 Overleaf (2)
+      </a>
+    </h1>
+    <div class="nested-links f5 lh-copy nested-copy-line-height">
+      [TOC]
+前言 這篇是接續著前一篇「自架 Overleaf (1)」，要帶大家來幫自架的 Overleaf 加一些好料的。
+（這個部落格現在真的是很醜，反正未來的某個時間一定會改善的，請眾讀者原諒。）
+正文 先幫大家複習一下 Overleaf community edition 有哪些不方便的地方：
+註冊新使用者很不方便 admin panel 資訊和功能很少 project 新增協作者時不會顯示「接受邀請的連結」 接下來將以這些不便之處為出發點，帶大家來 patch 這些功能。啊因為寫的當下有些東西我也還沒想過要怎麼改，所以沒有保證每個提出來的問題都會解決（不負責任的人）
+本篇我所修改過的 code 都可以在 我的 repo 找到。
+「首次登入即自動註冊」的功能 既然要加新功能，那我們就得要直接挖進 Overleaf server 的 source code 了。把 Overleaf 的 repo clone 下來，發揮一點逆向工程的精神（其實就只是讀別人 source code 而已講那麼高級），可以發現幾個我們有興趣的檔案：
+services/web/app/src/Features/Authentication/AuthenticationManager.js authenticate() 函數負責處理使用者的登入請求，會呼叫 _checkUserPassword() 來檢查帳密 _checkUserPassword() 試圖從 mongodb 裡找到該使用者的登入資訊並比對 services/web/app/src/Features/User/UserRegistrationHandler.js 這個檔案提供了註冊新使用者的 registerNewUser() 函數 所以看起來，我們只要在 AuthenticationManager._checkUserPassword() 裡面加上「找不到使用者的話就呼叫 UserRegistrationHandler.registerNewUser() 幫他註冊」的功能就解決了。
+仔細讀了一下 AuthenticationManager.js，發現在這個檔案裡完全沒有 async/await 或 Promise 的存在，全部都是 callback 地獄。我們要對 AuthenticationManager.
+    </div>
+  </div>
+</div>
+
+        </div>
+      
+        <div class="relative w-100 w-30-l mb4 bg-white">
+          <div class="relative w-100 mb4 bg-white nested-copy-line-height">
+  <div class="bg-white mb3 pa4 gray overflow-hidden">
+    <span class="f6 db">Posts</span>
+    <h1 class="f3 near-black">
       <a href="/my-blog/posts/20240212-overleaf/" class="link black dim">
         自架 Overleaf (1)
       </a>
