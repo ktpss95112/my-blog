@@ -165,7 +165,7 @@ overleaf-toolkit/
 * email: `chiffon@example.com`
 * password: `12345678`
 
-![](../../images/20240213/login-success.png)
+![](./login-success.png)
 
 > Note: 如果 email 輸入 `chiffon@localhost` 的話，網站會跳出 `Something went wrong. Please try again.` 的錯誤訊息。用 `bin/logs -n all web` 看錯誤訊息，會發現錯誤發生在 `registerNewUser()` 的 [這行](https://github.com/overleaf/overleaf/blob/6d98d6a7c0fa51c9615ececd747889f6a0dee14a/services/web/app/src/Features/User/UserRegistrationHandler.js#L47)。繼續追下去的話，會發現 `chiffon@localhost` 不是 [合法的 email address](https://github.com/overleaf/overleaf/blob/6d98d6a7c0fa51c9615ececd747889f6a0dee14a/services/web/app/src/Features/Helpers/EmailHelper.js#L6)，所以註冊的請求才會失敗。
 
@@ -222,7 +222,7 @@ overleaf-toolkit/
 
 隨便使用一個帳號開啟一個新的 project，然後點選右上角 share project 的按鈕。輸入了我們想要邀請的協作者，送出之後卻發現畫面顯示了「Invite not yet accepted.」和「Resend」的按鈕。我們的 Overleaf 明明沒開啟寄送 email 的功能，那這樣受邀請的人到底要怎樣才能接受邀請？
 
-![](../../images/20240213/share-no-link.png)
+![](./share-no-link.png)
 
 
 CollaboratorsInviteHandler.inviteToProject
@@ -230,7 +230,7 @@ CollaboratorsEmailHandler
 export function sendInvite(projectId, email, privileges) {
 
 
-可能有 unit test 會壞掉 
+可能有 unit test 會壞掉
 
 讓 admin 可以在 web 的 admin panel 重設使用者的密碼
 

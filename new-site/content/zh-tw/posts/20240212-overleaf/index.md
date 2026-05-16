@@ -52,7 +52,7 @@ bin/init
 bin/up
 ```
 
-![](../../images/20240212/bin-up.png)
+![](./bin-up.png)
 
 > Note 1: 我有在 Proxmox VE 開一台虛擬機測試，如果執行上面指令看到 `bin/up` 輸出 mongo service 的狀態是 error 而不是 running 或 healthy，可以打 `bin/docker-compose logs mongo` 來看 mongo service 的錯誤訊息，會發現可能是 mongo 抱怨 cpu 沒有支援 AVX 的指令集。Google 到的解決方法是把 Proxmox VE 虛擬機的 cpu type 設定成 host，因為預設的 qemu cpu 沒有支援 AVX。
 
@@ -94,7 +94,7 @@ bin/up
 
 `xcolor` 是一個很基本的套件，可以用來設定文字顏色，但我們自己架的 Overleaf server 吐了 `LaTeX Error: File 'xcolor.sty' not found.` 給我們：
 
-![](../../images/20240212/package-not-found.png)
+![](./package-not-found.png)
 
 Overleaf 的 LaTeX 套件是用 [tlmgr (TeX Live package manager)](https://www.tug.org/texlive/tlmgr.html) 來管理的。我們可以參考 [官方 wiki](https://github.com/overleaf/toolkit/blob/master/doc/ce-upgrading-texlive.md) 的教學手動進到 Overleaf 的 container 裡面裝套件，但這樣做的話每次重新 build 或更新 overleaf 版本的時候就都要手動重複一樣的工作，聽起來就超糟的。
 
@@ -152,7 +152,7 @@ overleaf-toolkit/
 
 重開好之後再登入，重新編譯一次我們的檔案：
 
-![](../../images/20240212/package-found.png)
+![](./package-found.png)
 
 輕鬆簡單是吧（其實也還好
 
@@ -170,6 +170,6 @@ overleaf-toolkit/
 
 本來在本文中想要用 LaTeX 語法打出 LaTeX 的 logo，但要讓 hugo 顯示 $\LaTeX$ 好像沒有那麼單純。隨手搜尋了一下 "enable latex in hugo"，竟發現搜尋結果第三項是另一友人 [Vincent Hsieh](https://www.vincentthh35.com/)，讓我驚覺身旁的友人都各自有其事業，我也該更努力一點。
 
-![](../../images/20240212/google-search.png)
+![](./google-search.png)
 
 
