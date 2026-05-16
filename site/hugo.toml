@@ -101,3 +101,7 @@ url = "https://www.facebook.com/phoenix.tsai.492648/"
 [[params.socialIcons]]
 name = "linkedin"
 url = "https://www.linkedin.com/in/chi-feng-tsai-5b2860275/"
+
+[caches]
+  [caches.images]
+    dir = ':cacheDir/images'
