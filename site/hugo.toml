@@ -1,4 +1,4 @@
-baseURL = 'https://ktpss95112.github.io/my-blog/'
+baseURL = 'https://blog.chichichichichiffoncake.work/'
 locale = 'zh-tw'
 title = "Chiffoncake's Blog"
 theme = "hugo-blog-awesome"
