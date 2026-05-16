@@ -57,7 +57,7 @@ defaultContentLanguage = "zh-tw"
   # Your custom scripts will be concatenated to one file `custom.js`.
   # When building for production it will be minified.
   # The file `custom.js` is loaded on each page (before body tag ends).
-  dateFormat = "" # date format used to show dates on various pages. If nothing is specified, then "2 Jan 2006" format is used.
+  dateFormat = "2006.01.02" # date format used to show dates on various pages. If nothing is specified, then "2 Jan 2006" format is used.
   # See https://gohugo.io/functions/time/format/ for available date formats.
   rssFeedDescription = "summary" # available options: 1) summary 2) full
   # summary - includes a short summary of the blog post in the RSS feed. Generated using Hugo .Summary .
@@ -91,12 +91,20 @@ defaultContentLanguage = "zh-tw"
   email = "chiffoncake@csie.ntu.edu.tw"
 
 [[params.socialIcons]]
+name = "email"
+url = "chiffoncake@csie.ntu.edu.tw"
+
+[[params.socialIcons]]
 name = "github"
 url = "https://github.com/ktpss95112"
 
 [[params.socialIcons]]
 name = "facebook"
 url = "https://www.facebook.com/phoenix.tsai.492648/"
+
+[[params.socialIcons]]
+name = "instagram"
+url = "https://www.instagram.com/chiffon.cat.not.cake/"
 
 [[params.socialIcons]]
 name = "linkedin"
