@@ -1,0 +1,5 @@
+// Ensure that kerning is disabled for Chinese text, so punctuation marks are always full-width.
+body {
+    font-feature-settings: "kern" 0;
+    font-kerning: auto;
+}
