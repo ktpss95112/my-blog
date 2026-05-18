@@ -1,3 +1,5 @@
 # Chiffoncake's Blog
 
-work in process ...
+https://blog.chichichichichiffoncake.work/
+
+This website is built with [Hugo](https://gohugo.io/) and hosted on GitHub Pages with custom domain support.
