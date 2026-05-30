@@ -23,11 +23,35 @@ isStarred: false
 
 第一份作業是環境準備。作業說明中提及了 Git 的使用，然後是說明怎麼編譯程式碼。
 
+<details>
+	<summary>錯誤嘗試（已折疊）</summary>
+
+下載 repo：[https://github.com/wjakob/nori](https://github.com/wjakob/nori)
+
 我的電腦系統使用 Arch Linux，安裝了 `cmake` 後，照著作業說明來編譯程式碼，但因為 Nori 的 dependency 有許多陳舊的 library，裡面的 cmake 檔案使用了舊的格式，因此需要手動加上 `-DCMAKE_POLICY_VERSION_MINIMUM=3.5` 的 flag 才能順利編譯。另外，`tbb` 這個 extension 因為 C++ 版本過舊，編譯時也需要加上 `-DCMAKE_CXX_FLAGS="-Wno-error=changes-meaning"` 的 flag 才能順利編譯。最終使用的 command 如下：
 
 ```bash
 mkdir build && cd build
 cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_CXX_FLAGS="-Wno-error=changes-meaning" ..
+make -j
+```
+
+---
+</details>
+
+Fork repo：[https://github.com/cs440-epfl/nori-base-2026](https://github.com/cs440-epfl/nori-base-2026)
+
+```bash
+git clone git@github.com:ktpss95112/nori-base-2026.git
+cd nori-base-2026
+git submodule update --init --recursive
+```
+
+照作業說明編譯：
+
+```bash
+mkdir build && cd build
+cmake ..
 make -j
 ```
 
