@@ -1,5 +1,5 @@
 ---
-title: Nori 筆記 (1)
+title: Nori 筆記 (1) Introduction & Assignment 1
 date: 2026-05-27T13:45:52+08:00
 draft: false
 description:
