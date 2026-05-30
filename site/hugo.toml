@@ -110,6 +110,10 @@ url = "https://www.instagram.com/chiffon.cat.not.cake/"
 name = "linkedin"
 url = "https://www.linkedin.com/in/chi-feng-tsai-5b2860275/"
 
+[[params.socialIcons]]
+name = "Rss"
+url = "/index.xml"
+
 [caches]
   [caches.images]
     dir = ':cacheDir/images'
