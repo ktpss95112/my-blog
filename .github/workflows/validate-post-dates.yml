@@ -1,0 +1,25 @@
+name: Validate Post Dates
+
+on:
+  pull_request:
+    paths:
+      - 'site/content/*/posts/*/index.md'
+      - 'scripts/check-post-dates.sh'
+      - '.github/workflows/validate-post-dates.yml'
+  push:
+    paths:
+      - 'site/content/*/posts/*/index.md'
+      - 'scripts/check-post-dates.sh'
+      - '.github/workflows/validate-post-dates.yml'
+  workflow_dispatch:
+
+jobs:
+  validate-post-dates:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check post folder date and front matter date
+        run: bash scripts/check-post-dates.sh
