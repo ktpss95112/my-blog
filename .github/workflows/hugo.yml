@@ -77,6 +77,8 @@ jobs:
           key: hugo-${{ github.run_id }}
           restore-keys:
             hugo-
+      - name: Show Hugo config
+        run: cd site && hugo config
       - name: Build the site
         run: |
           cd site && hugo build \
