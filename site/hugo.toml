@@ -3,6 +3,8 @@ locale = 'zh-tw'
 title = "Chiffoncake's Blog"
 theme = "hugo-blog-awesome"
 
+enableRobotsTXT = true
+
 enableEmoji = true
 defaultContentLanguage = "zh-tw"
 
