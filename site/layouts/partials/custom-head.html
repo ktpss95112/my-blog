@@ -1,4 +1,20 @@
 {{- with resources.Get "sass/custom.scss" -}}
   {{- $customStyle := . | toCSS (dict "targetPath" "custom.css") | minify | fingerprint -}}
   <link href="{{ $customStyle.RelPermalink }}" rel="stylesheet">
+
+  {{ with site.Params.person }}
+    {{ if or $.IsHome (eq $.Params.schema "person") }}
+      {{ $person := dict
+        "@context" "https://schema.org"
+        "@type" "Person"
+        "@id" (printf "%s#person" .url)
+        "name" .name
+        "url" .url
+        "sameAs" .sameAs
+      }}
+      <script type="application/ld+json">
+        {{ $person | jsonify | safeJS }}
+      </script>
+    {{ end }}
+  {{ end }}
 {{- end -}}

@@ -92,6 +92,19 @@ defaultContentLanguage = "zh-tw"
   name = "Chi-Feng Tsai"
   email = "chiffoncake@csie.ntu.edu.tw"
 
+# custom params for SEO and structured data
+[params.person]
+  name = "Chi-Feng Tsai"
+  givenName = "奇夆"
+  familyName = "蔡"
+  url = "https://blog.chichichichichiffoncake.work/pages/about/"
+  sameAs = [
+    "https://github.com/ktpss95112",
+    "https://www.facebook.com/phoenix.tsai.492648/",
+    "https://www.instagram.com/chiffon.cat.not.cake/",
+    "https://www.linkedin.com/in/chi-feng-tsai-5b2860275/",
+  ]
+
 [[params.socialIcons]]
 name = "email"
 url = "chiffoncake@csie.ntu.edu.tw"

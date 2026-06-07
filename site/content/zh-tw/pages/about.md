@@ -1,6 +1,7 @@
 ---
 title: About
 toc: false
+schema: person
 ---
 
 蔡奇夆，臺大資工系 B07，臺大資工所 R11。新竹人。
